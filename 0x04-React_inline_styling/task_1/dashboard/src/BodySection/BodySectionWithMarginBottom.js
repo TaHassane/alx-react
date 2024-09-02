@@ -1,27 +1,21 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React from "react";
+import { shallow } from "enzyme";
+import BodySectionWithMarginBottom from "./BodySectionWithMarginBottom";
 import BodySection from "./BodySection";
-import { StyleSheet, css } from "aphrodite";
+import { StyleSheetTestUtils } from "aphrodite";
 
-class BodySectionWithMarginBottom extends Component {
-  render() {
-    return (
-      <div className={css(styles.bodySectionWithMargin)}>
-        <BodySection {...this.props} />
-      </div>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  bodySectionWithMargin: {
-    marginBottom: "40",
-  },
+beforeEach(() => {
+  StyleSheetTestUtils.suppressStyleInjection();
+});
+afterEach(() => {
+  StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
 });
 
-BodySectionWithMarginBottom.propTypes = {
-  title: PropTypes.string.isRequired,
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-};
+describe("BodySectionWithMarginBottom tests", () => {
+  it("should apply margin bottom to child component", () => {
+    const wrapper = shallow(<BodySectionWithMarginBottom title="test title" />);
 
-export default BodySectionWithMarginBottom;
+    expect(wrapper.find(BodySection)).toHaveLength(1);
+    expect(wrapper.find(BodySection).html()).toEqual('<div class="bodySection"><h2>test title</h2></div>');
+  });
+});
